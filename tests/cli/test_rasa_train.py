@@ -1,5 +1,4 @@
 import os
-import shutil
 import tempfile
 
 import pytest
@@ -11,9 +10,9 @@ from rasa.nlu.model import Metadata
 from rasa.nlu.training_data import training_data
 from rasa.cli.train import _get_valid_config
 from rasa.constants import (
-    CONFIG_KEYS_CORE,
-    CONFIG_KEYS,
-    CONFIG_KEYS_NLU,
+    CONFIG_MANDATORY_KEYS_CORE,
+    CONFIG_MANDATORY_KEYS_NLU,
+    CONFIG_MANDATORY_KEYS,
 )
 import rasa.utils.io as io_utils
 
@@ -375,8 +374,8 @@ def test_train_core_help(run: Callable[..., RunResult]):
                 "pipeline": "supervised",
                 "policies": ["KerasPolicy", "FallbackPolicy"],
             },
-            "mandatory_keys": CONFIG_KEYS_CORE,
-            "error": True,
+            "mandatory_keys": CONFIG_MANDATORY_KEYS_CORE,
+            "error": False,
         },
         {
             "config_data": {},
@@ -385,7 +384,7 @@ def test_train_core_help(run: Callable[..., RunResult]):
                 "pipeline": "supervised",
                 "policies": ["KerasPolicy", "FallbackPolicy"],
             },
-            "mandatory_keys": CONFIG_KEYS,
+            "mandatory_keys": CONFIG_MANDATORY_KEYS,
             "error": True,
         },
         {
@@ -398,7 +397,7 @@ def test_train_core_help(run: Callable[..., RunResult]):
                 "pipeline": "supervised",
                 "policies": ["KerasPolicy", "FallbackPolicy"],
             },
-            "mandatory_keys": CONFIG_KEYS_NLU,
+            "mandatory_keys": CONFIG_MANDATORY_KEYS_NLU,
             "error": True,
         },
         {
@@ -407,7 +406,7 @@ def test_train_core_help(run: Callable[..., RunResult]):
                 "pipeline": "supervised",
                 "policies": ["KerasPolicy", "FallbackPolicy"],
             },
-            "mandatory_keys": CONFIG_KEYS_NLU,
+            "mandatory_keys": CONFIG_MANDATORY_KEYS_NLU,
             "error": True,
         },
         {
@@ -417,19 +416,19 @@ def test_train_core_help(run: Callable[..., RunResult]):
                 "pipeline": "supervised",
                 "policies": ["KerasPolicy", "FallbackPolicy"],
             },
-            "mandatory_keys": CONFIG_KEYS,
+            "mandatory_keys": CONFIG_MANDATORY_KEYS,
             "error": False,
         },
         {
             "config_data": None,
             "default_config": {"language": "en", "pipeline": "supervised"},
-            "mandatory_keys": CONFIG_KEYS_CORE,
+            "mandatory_keys": CONFIG_MANDATORY_KEYS_CORE,
             "error": True,
         },
         {
             "config_data": None,
             "default_config": None,
-            "mandatory_keys": CONFIG_KEYS,
+            "mandatory_keys": CONFIG_MANDATORY_KEYS,
             "error": True,
         },
     ],
@@ -464,4 +463,4 @@ def test_get_valid_config(parameters):
 
 def test_get_valid_config_with_non_existing_file():
     with pytest.raises(SystemExit):
-        _get_valid_config("non-existing-file.yml", CONFIG_KEYS)
+        _get_valid_config("non-existing-file.yml", CONFIG_MANDATORY_KEYS)
